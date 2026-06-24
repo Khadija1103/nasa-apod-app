@@ -10,26 +10,44 @@
 
 <body>
 
+  <!-- HEADER -->
   <header>
     <h1>🚀 NASA Astronomy Picture of the Day 🚀</h1>
   </header>
 
   <main>
 
-    <div class="contenedor-apod">
+    <!-- 🔍 BUSCADOR -->
+    <section class="buscador">
 
-      <h2 id="titulo">
-        Cargando...
-      </h2>
+      <h2 class="titulo-buscador">NASA APOD</h2>
 
-      <p id="fecha"></p>
+      <div class="form-buscador">
 
-      <div id="contenido-media">
+        <input type="date" id="fecha" class="input-fecha">
+
+        <button id="buscarBtn" class="btn-buscar">
+          Buscar
+        </button>
+
       </div>
+
+      <p id="mensajeError" class="error"></p>
+
+    </section>
+
+    <!-- 📸 CONTENIDO -->
+    <section class="contenedor-apod">
+
+      <h2 id="titulo">Cargando...</h2>
+
+      <p id="fechaResultado"></p>
+
+      <div id="contenido-media"></div>
 
       <p id="descripcion"></p>
 
-    </div>
+    </section>
 
   </main>
 

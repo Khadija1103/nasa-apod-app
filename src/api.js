@@ -1,40 +1,51 @@
-const API_KEY = "tIy9vyoR7xLzjjJkLpt5zZsZnkYx9zZ9HLUnuTDA";
+const API_KEY = "nzQsoER8kjKLrAUvIurNQFs2bRM304AXuqgMSmkS";
 const BASE_URL = "https://api.nasa.gov/planetary/apod";
 
-// Obtener la APOD del día
-export async function getTodayAPOD() {
+/**
+ * 🔥 Función base para consumir NASA APOD
+ * Maneja errores HTTP, 503 y respuestas no JSON
+ */
+async function fetchAPOD(params = "") {
   try {
     const response = await fetch(
-      `${BASE_URL}?api_key=${API_KEY}`
+      `${BASE_URL}?api_key=${API_KEY}${params}`
     );
 
+    // 🚨 Error HTTP (503, 429, etc.)
     if (!response.ok) {
-      throw new Error("No se pudo obtener la APOD del día");
+      const errorText = await response.text();
+      throw new Error(errorText || "Error en NASA API");
     }
 
-    const data = await response.json();
-    return data;
+    // 🚨 Evita crash por JSON inválido
+    const textData = await response.text();
+
+    try {
+      return JSON.parse(textData);
+    } catch (err) {
+      throw new Error("Respuesta inválida de NASA API: " + textData);
+    }
+
   } catch (error) {
-    console.error("Error de conexión:", error);
+    console.error("❌ Error de conexión con NASA API:", error);
     throw error;
   }
 }
 
-// Obtener la APOD por fecha
+/**
+ * 🌌 APOD del día
+ */
+export async function getTodayAPOD() {
+  return await fetchAPOD();
+}
+
+/**
+ * 📅 APOD por fecha
+ */
 export async function getAPODByDate(date) {
-  try {
-    const response = await fetch(
-      `${BASE_URL}?api_key=${API_KEY}&date=${date}`
-    );
-
-    if (!response.ok) {
-      throw new Error("No se pudo obtener la APOD para la fecha seleccionada");
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error de conexión:", error);
-    throw error;
+  if (!date) {
+    throw new Error("Debes enviar una fecha válida");
   }
+
+  return await fetchAPOD(`&date=${date}`);
 }
