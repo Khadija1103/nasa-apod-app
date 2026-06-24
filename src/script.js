@@ -9,18 +9,25 @@ const fechaResultado = document.getElementById("fechaResultado");
 const media = document.getElementById("contenido-media");
 const descripcion = document.getElementById("descripcion");
 
-let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+const btnFavorito = document.getElementById("btnFavorito");
+const listaFavoritos = document.getElementById("listaFavoritos");
 
-let elementoActual = null;
+let apodActual = null;
 
 // 🚀 CARGAR APOD DEL DÍA AL INICIAR
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const data = await getTodayAPOD();
-    elementoActual = data;
+
     renderAPOD(data);
+
+    mostrarFavoritos();
+
   } catch (error) {
-    mensajeError.textContent = "Error al cargar la imagen del día";
+
+    mensajeError.textContent =
+      "Error al cargar la imagen del día";
+
     console.error(error);
   }
 });
@@ -33,28 +40,108 @@ buscarBtn.addEventListener("click", async () => {
   mensajeError.textContent = "";
 
   if (!fechaSeleccionada) {
-    mensajeError.textContent = "Seleccione una fecha";
+    mensajeError.textContent =
+      "Seleccione una fecha";
     return;
   }
 
-  const hoy = new Date().toISOString().split("T")[0];
+  const hoy =
+    new Date().toISOString().split("T")[0];
 
   if (fechaSeleccionada > hoy) {
-    mensajeError.textContent = "No se permiten fechas futuras";
+    mensajeError.textContent =
+      "No se permiten fechas futuras";
     return;
   }
 
   try {
-    const data = await getAPODByDate(fechaSeleccionada);
+
+    const data =
+      await getAPODByDate(fechaSeleccionada);
+
     renderAPOD(data);
+
   } catch (error) {
-    mensajeError.textContent = "Error al consultar la API";
+
+    mensajeError.textContent =
+      "Error al consultar la API";
+
     console.error(error);
   }
 });
 
+// ⭐ GUARDAR FAVORITO
+btnFavorito.addEventListener("click", () => {
+
+  if (!apodActual) return;
+
+  const favoritos =
+    JSON.parse(
+      localStorage.getItem("favoritos")
+    ) || [];
+
+  const existe = favoritos.some(
+    item => item.date === apodActual.date
+  );
+
+  if (existe) {
+
+    mensajeError.textContent =
+      "Esta APOD ya está en favoritos";
+
+    return;
+  }
+
+  favoritos.push(apodActual);
+
+  localStorage.setItem(
+    "favoritos",
+    JSON.stringify(favoritos)
+  );
+
+  mensajeError.textContent = "";
+
+  mostrarFavoritos();
+
+});
+
+// ⭐ MOSTRAR FAVORITOS
+function mostrarFavoritos() {
+
+  const favoritos =
+    JSON.parse(
+      localStorage.getItem("favoritos")
+    ) || [];
+
+  listaFavoritos.innerHTML = "";
+
+  favoritos.forEach(item => {
+
+    const div =
+      document.createElement("div");
+
+    div.classList.add("favorito-item");
+
+    div.innerHTML = `
+      <p>${item.title}</p>
+      <p class="favorito-fecha">
+        ${item.date}
+      </p>
+    `;
+
+    div.addEventListener("click", () => {
+      renderAPOD(item);
+    });
+
+    listaFavoritos.appendChild(div);
+
+  });
+}
+
 // 🎯 RENDER CENTRAL
 function renderAPOD(data) {
+
+  apodActual = data;
 
   titulo.textContent = data.title;
   fechaResultado.textContent = data.date;
@@ -65,21 +152,29 @@ function renderAPOD(data) {
   if (data.media_type === "image") {
 
     contenedor.innerHTML = `
-      <img src="${data.url}" alt="${data.title}" class="nasa-media">
+      <img
+        src="${data.url}"
+        alt="${data.title}"
+        class="nasa-media">
     `;
 
-  } else if (data.media_type === "video") {
+  }
+
+  else if (data.media_type === "video") {
 
     // MP4
     if (data.url.endsWith(".mp4")) {
 
       contenedor.innerHTML = `
         <video controls class="nasa-media">
-          <source src="${data.url}" type="video/mp4">
+          <source
+            src="${data.url}"
+            type="video/mp4">
         </video>
       `;
 
     }
+
     // YouTube
     else if (
       data.url.includes("youtube.com") ||
@@ -88,66 +183,38 @@ function renderAPOD(data) {
 
       let videoUrl = data.url;
 
-      if (videoUrl.includes("watch?v=")) {
-        videoUrl = videoUrl.replace("watch?v=", "embed/");
+      if (
+        videoUrl.includes("watch?v=")
+      ) {
+
+        videoUrl =
+          videoUrl.replace(
+            "watch?v=",
+            "embed/"
+          );
       }
 
       contenedor.innerHTML = `
-        <iframe src="${videoUrl}" class="nasa-media" allowfullscreen></iframe>
+        <iframe
+          src="${videoUrl}"
+          class="nasa-media"
+          allowfullscreen>
+        </iframe>
       `;
 
     }
+
     // Otro tipo de video
     else {
 
       contenedor.innerHTML = `
-        <a href="${data.url}" target="_blank">
+        <a
+          href="${data.url}"
+          target="_blank">
           Ver video
         </a>
       `;
+
     }
   }
 }
-
-function agregarFavoritos() {
-  if (elementoActual != null) {
-    //obtengo la imagen
-    if (favoritos.length == 0) {
-      favoritos.push(elementoActual);
-    } else {
-      const match = favoritos.find((i) => i.url === elementoActual.url);
-      if (!match) {
-        favoritos.push(elementoActual);
-      }
-    }
-    localStorage.setItem("favoritos", JSON.stringify(favoritos));
-  }
-  mostrarFavoritos();
-}
-
-let boton = document.getElementById("btn_favorito");
-
-boton.addEventListener("click", agregarFavoritos);
-
-function mostrarFavoritos() {
-  let divFavoritos = document.getElementById("favoritos");
-  let htmlFavoritos = "";
-  for (let favorito of favoritos) {
-    htmlFavoritos += `
-     <h2 id="titulo">
-        ${favorito.title}
-      </h2>
-      <p id="fecha"> ${favorito.date}</p>
-      <div id="contenido-media">
-      <video width="640" height="360" controls>
-  <source src="${favorito.url}" type="video/mp4">
-  Tu navegador no soporta el formato de video.
-</video>
-      </div>
-      <p id="descripcion">${favorito.explanation}</p>
-        `;
-  }
-  divFavoritos.innerHTML = htmlFavoritos;
-}
-
-mostrarFavoritos();

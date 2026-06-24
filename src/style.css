@@ -105,37 +105,100 @@ header h1 {
   margin-bottom: 20px;
 }
 
-#contenido-media img {
-  width: 100%;
-  max-width: 800px;
-  border-radius: 10px;
-}
-
-#contenido-media iframe {
-  width: 100%;
-  max-width: 800px;
-  height: 450px;
-  border: none;
-  border-radius: 10px;
-}
-
 #descripcion {
   line-height: 1.6;
   text-align: justify;
+  margin-bottom: 20px;
 }
 
-.btn-favorito {
-  padding: 10px 20px;
-  background: yellow;
+/* =========================
+   IMÁGENES Y VIDEOS NASA
+========================= */
+.nasa-media {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 10px;
+}
+
+img.nasa-media {
+  height: auto;
+}
+
+video.nasa-media {
+  height: auto;
+}
+
+iframe.nasa-media {
+  height: 500px;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  color: #0b1020;
-  transition: 0.3s;
 }
 
-.btn-favorito:hover {
-  background-color: rgb(80, 80, 32);
-  transform: scale(1.05);
+/* =========================
+   FAVORITOS
+========================= */
+
+#btnFavorito {
+  display: block;
+  margin: 20px auto;
+}
+
+.favoritos-container {
+  margin-top: 30px;
+}
+
+.favoritos-container h3 {
+  text-align: center;
+  color: #4fc3f7;
+  margin-bottom: 15px;
+}
+
+#listaFavoritos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.favorito-item {
+  background: #1e2a4a;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-left: 4px solid #4fc3f7;
+}
+
+.favorito-item:hover {
+  background: #26355c;
+  transform: translateX(5px);
+}
+
+.favorito-item p {
+  margin: 0;
+  color: white;
+  font-size: 14px;
+}
+
+.favorito-fecha {
+  color: #4fc3f7;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+  .form-buscador {
+    flex-direction: column;
+  }
+
+  .input-fecha,
+  .btn-buscar {
+    width: 100%;
+  }
+
+  iframe.nasa-media {
+    height: 300px;
+  }
 }
