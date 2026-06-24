@@ -9,10 +9,15 @@ const fechaResultado = document.getElementById("fechaResultado");
 const media = document.getElementById("contenido-media");
 const descripcion = document.getElementById("descripcion");
 
+let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+
+let elementoActual = null;
+
 // 🚀 CARGAR APOD DEL DÍA AL INICIAR
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const data = await getTodayAPOD();
+    elementoActual = data;
     renderAPOD(data);
   } catch (error) {
     mensajeError.textContent = "Error al cargar la imagen del día";
@@ -103,3 +108,46 @@ function renderAPOD(data) {
     }
   }
 }
+
+function agregarFavoritos() {
+  if (elementoActual != null) {
+    //obtengo la imagen
+    if (favoritos.length == 0) {
+      favoritos.push(elementoActual);
+    } else {
+      const match = favoritos.find((i) => i.url === elementoActual.url);
+      if (!match) {
+        favoritos.push(elementoActual);
+      }
+    }
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+  }
+  mostrarFavoritos();
+}
+
+let boton = document.getElementById("btn_favorito");
+
+boton.addEventListener("click", agregarFavoritos);
+
+function mostrarFavoritos() {
+  let divFavoritos = document.getElementById("favoritos");
+  let htmlFavoritos = "";
+  for (let favorito of favoritos) {
+    htmlFavoritos += `
+     <h2 id="titulo">
+        ${favorito.title}
+      </h2>
+      <p id="fecha"> ${favorito.date}</p>
+      <div id="contenido-media">
+      <video width="640" height="360" controls>
+  <source src="${favorito.url}" type="video/mp4">
+  Tu navegador no soporta el formato de video.
+</video>
+      </div>
+      <p id="descripcion">${favorito.explanation}</p>
+        `;
+  }
+  divFavoritos.innerHTML = htmlFavoritos;
+}
+
+mostrarFavoritos();
