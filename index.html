@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./src/style.css">
   <title>NASA APOD App</title>
 </head>
@@ -17,7 +17,7 @@
 
   <main>
 
-    <!-- 🔍 BUSCADOR -->
+    <!-- BUSCADOR -->
     <section class="buscador">
 
       <h2 class="titulo-buscador">NASA APOD</h2>
@@ -36,7 +36,7 @@
 
     </section>
 
-    <!-- 📸 CONTENIDO -->
+    <!-- CONTENIDO APOD -->
     <section class="contenedor-apod">
 
       <h2 id="titulo">Cargando...</h2>
@@ -46,6 +46,19 @@
       <div id="contenido-media"></div>
 
       <p id="descripcion"></p>
+
+      <!-- FAVORITOS -->
+      <button id="btnFavorito" class="btn-buscar">
+        ⭐ Agregar a Favoritos
+      </button>
+
+      <div class="favoritos-container">
+
+        <h3>⭐ Favoritos Guardados</h3>
+
+        <div id="listaFavoritos"></div>
+
+      </div>
 
     </section>
 
