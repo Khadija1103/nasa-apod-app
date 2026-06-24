@@ -1,4 +1,4 @@
-const API_KEY = "DEMO_KEY";
+const API_KEY = "tIy9vyoR7xLzjjJkLpt5zZsZnkYx9zZ9HLUnuTDA";
 const BASE_URL = "https://api.nasa.gov/planetary/apod";
 
 // Obtener la APOD del día

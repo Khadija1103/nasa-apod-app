@@ -1,13 +1,40 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>nasa-apod-app</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./src/style.css">
+  <title>NASA APOD App</title>
+</head>
+
+<body>
+
+  <header>
+    <h1>🚀 NASA Astronomy Picture of the Day 🚀</h1>
+  </header>
+
+  <main>
+
+    <div class="contenedor-apod">
+
+      <h2 id="titulo">
+        Cargando...
+      </h2>
+
+      <p id="fecha"></p>
+
+      <div id="contenido-media">
+      </div>
+
+      <p id="descripcion"></p>
+
+    </div>
+
+  </main>
+
+  <script type="module" src="./src/script.js"></script>
+
+</body>
+
 </html>
